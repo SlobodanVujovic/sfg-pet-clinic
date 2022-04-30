@@ -1,2 +1,4 @@
-package com.vujo.sfgpetclinic.model;public class Vet {
+package com.vujo.sfgpetclinic.model;
+
+public class Vet extends Person{
 }
