@@ -26,7 +26,7 @@
     </properties>
 
     <scm>
-        <developerConnection>git:git@github.com:SlobodanVujovic/sfg-pet-clinic.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:SlobodanVujovic/sfg-pet-clinic.git</developerConnection>
     </scm>
     <distributionManagement>
         <repository>
