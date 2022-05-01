@@ -20,31 +20,40 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>sfg-pet-clinic</name>
     <description>sfg-pet-clinic</description>
+
     <properties>
         <java.version>18</java.version>
     </properties>
 
+    <scm>
+        <developerConnection>git:git@github.com:SlobodanVujovic/sfg-pet-clinic.git</developerConnection>
+    </scm>
+    <distributionManagement>
+        <repository>
+            <id>sfg-pet-clinic</id>
+            <url>file:C:\SlobodanVujovic\Junk\sfg-pet-clinic\Releases\</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <plugins>
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--            </plugin>-->
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>2.0.0-M1</version>
                 <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
+                    <username>SlobodanVujovic</username>
+                    <password>vujo1987.</password>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                </configuration>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.0-M5</version>
             </plugin>
         </plugins>
     </build>
