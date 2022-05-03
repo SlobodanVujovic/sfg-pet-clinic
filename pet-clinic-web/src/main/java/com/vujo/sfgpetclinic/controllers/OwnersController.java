@@ -1,13 +1,28 @@
 package com.vujo.sfgpetclinic.controllers;
 
+import com.vujo.sfgpetclinic.model.Owner;
+import com.vujo.sfgpetclinic.services.OwnerService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Set;
 
 @Controller
 @RequestMapping("/owners")
 public class OwnersController {
+
+    private final OwnerService ownerService;
+
+    public OwnersController(OwnerService ownerService) {
+        this.ownerService = ownerService;
+    }
+
     @RequestMapping({"", "/", "index", "index.html"})
-    public String index() {
+    public String index(Model model) {
+        Set<Owner> owners = ownerService.findAll();
+        model.addAttribute("owners", owners);
+
         return "owners/index";
     }
 }
