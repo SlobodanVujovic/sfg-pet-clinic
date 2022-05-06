@@ -1,6 +1,7 @@
 package com.vujo.sfgpetclinic.bootstrap;
 
 import com.vujo.sfgpetclinic.model.Owner;
+import com.vujo.sfgpetclinic.model.Pet;
 import com.vujo.sfgpetclinic.model.PetType;
 import com.vujo.sfgpetclinic.model.Vet;
 import com.vujo.sfgpetclinic.services.OwnerService;
@@ -8,6 +9,8 @@ import com.vujo.sfgpetclinic.services.PetTypeService;
 import com.vujo.sfgpetclinic.services.VetService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -39,12 +42,30 @@ public class DataLoader implements CommandLineRunner {
         Owner owner1 = new Owner();
         owner1.setFirstName("Michael");
         owner1.setLastName("Weston");
+        owner1.setAddress("Beogradska 1");
+        owner1.setCity("Beograd");
+        owner1.setTelephone("064/11 22 333");
+        Pet pet1 = new Pet();
+        pet1.setName("Meda");
+        pet1.setPetType(savedDogPetType);
+        pet1.setBirthDate(LocalDate.of(2020, 1, 1));
+        pet1.setOwner(owner1);
+        owner1.getPets().add(pet1);
 
         ownerService.save(owner1);
 
         Owner owner2 = new Owner();
         owner2.setFirstName("Fiona");
         owner2.setLastName("Glenanne");
+        owner2.setAddress("Beogradska 2");
+        owner2.setCity("Beograd");
+        owner2.setTelephone("064/11 22 444");
+        Pet pet2 = new Pet();
+        pet2.setName("Kitty");
+        pet2.setPetType(savedCatPetType);
+        pet2.setBirthDate(LocalDate.of(2020, 2, 2));
+        pet2.setOwner(owner2);
+        owner2.getPets().add(pet2);
 
         ownerService.save(owner2);
 
