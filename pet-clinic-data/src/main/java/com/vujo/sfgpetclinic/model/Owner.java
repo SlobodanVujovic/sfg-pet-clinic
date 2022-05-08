@@ -14,7 +14,7 @@ public class Owner extends Person {
     private String city;
     private String telephone;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<Pet> pets = new HashSet<>();
 
     public String getAddress() {
@@ -47,5 +47,16 @@ public class Owner extends Person {
 
     public void setPets(Set<Pet> pets) {
         this.pets = pets;
+    }
+
+    public Pet addPet(Pet pet) {
+        pet.setOwner(this);
+        this.pets.add(pet);
+        return pet;
+    }
+
+    public void removePet(Pet pet) {
+        pet.setOwner(null);
+        this.pets.remove(pet);
     }
 }
