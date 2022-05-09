@@ -1,10 +1,7 @@
 package com.vujo.sfgpetclinic.bootstrap;
 
 import com.vujo.sfgpetclinic.model.*;
-import com.vujo.sfgpetclinic.services.OwnerService;
-import com.vujo.sfgpetclinic.services.PetTypeService;
-import com.vujo.sfgpetclinic.services.SpecialityService;
-import com.vujo.sfgpetclinic.services.VetService;
+import com.vujo.sfgpetclinic.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +14,14 @@ public class DataLoader implements CommandLineRunner {
     private final VetService vetService;
     private final PetTypeService petTypeService;
     private final SpecialityService specialityService;
+    private final VisitService visitService;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialityService specialityService) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialityService specialityService, VisitService visitService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
         this.specialityService = specialityService;
+        this.visitService = visitService;
     }
 
     @Override
@@ -76,6 +75,12 @@ public class DataLoader implements CommandLineRunner {
         owner2.getPets().add(pet2);
 
         ownerService.save(owner2);
+
+        Visit pet2Visit = new Visit();
+        pet2Visit.setPet(pet2);
+        pet2Visit.setDate(LocalDate.of(2022, 4, 4));
+        pet2Visit.setDescription("Snizy Kitty");
+        visitService.save(pet2Visit);
 
         System.out.println("Loaded owners...");
 
