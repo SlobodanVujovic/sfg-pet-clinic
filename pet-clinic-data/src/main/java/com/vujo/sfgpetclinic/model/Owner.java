@@ -14,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "owners")
+@ToString
 public class Owner extends Person {
     private String address;
     private String city;
