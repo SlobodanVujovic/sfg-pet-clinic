@@ -1,7 +1,9 @@
 package com.vujo.sfgpetclinic.controllers;
 
+import com.vujo.sfgpetclinic.exceptions.NotFound;
 import com.vujo.sfgpetclinic.model.Owner;
 import com.vujo.sfgpetclinic.services.OwnerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +25,10 @@ public class OwnersController {
     @GetMapping("/{ownerId}")
     public ModelAndView getOwner(@PathVariable String ownerId) {
         Owner owner = ownerService.findById(Long.valueOf(ownerId));
+
+        if(owner == null){
+            throw new NotFound("Owner");
+        }
 
         ModelAndView modelAndView = new ModelAndView("owners/ownerDetails");
         modelAndView.addObject("owner", owner);
@@ -83,5 +89,25 @@ public class OwnersController {
         Owner savedOwner = ownerService.save(owner);
 
         return "redirect:/owners/" + savedOwner.getId();
+    }
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFound.class)
+    public ModelAndView notFoundHandler(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("notFound");
+
+        return modelAndView;
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView numberFormatExceptionHandler(Exception ex){
+        ModelAndView modelAndView = new ModelAndView();
+        String exceptionMessage = ex.getMessage();
+        modelAndView.addObject("exceptionMessage", exceptionMessage);
+        modelAndView.setViewName("badRequest");
+
+        return modelAndView;
     }
 }

@@ -103,7 +103,7 @@ class OwnersControllerTest {
 
         verify(ownerService).findAllByLastNameLike(anyString());
     }
-    
+
     @Test
     public void testInitCreateOwner() throws Exception {
         mockMvc.perform(get("/owners/new"))
@@ -144,5 +144,20 @@ class OwnersControllerTest {
         mockMvc.perform(post("/owners/1/edit"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/owners/1"));
+    }
+
+    @Test
+    public void testNotFoundOwner() throws Exception {
+        when(ownerService.findById(anyLong())).thenReturn(null);
+        mockMvc.perform(get("/owners/1"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("notFound"));
+    }
+
+    @Test
+    public void testNumberFormatException() throws Exception {
+        mockMvc.perform(get("/owners/shouldBeLong"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("badRequest"));
     }
 }
