@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -70,7 +71,13 @@ public class OwnersController {
     }
 
     @PostMapping("/new")
-    public String createOwner(Owner owner, Model model) {
+    public String createOwner(@Valid Owner owner, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()){
+            System.out.println("Validation error.");
+            return "owners/createOrUpdateOwnerForm";
+        }
+
         Owner savedOwner = ownerService.save(owner);
         return "redirect:/owners/" + savedOwner.getId();
     }
@@ -96,17 +103,6 @@ public class OwnersController {
     public ModelAndView notFoundHandler(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("notFound");
-
-        return modelAndView;
-    }
-
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NumberFormatException.class)
-    public ModelAndView numberFormatExceptionHandler(Exception ex){
-        ModelAndView modelAndView = new ModelAndView();
-        String exceptionMessage = ex.getMessage();
-        modelAndView.addObject("exceptionMessage", exceptionMessage);
-        modelAndView.setViewName("badRequest");
 
         return modelAndView;
     }

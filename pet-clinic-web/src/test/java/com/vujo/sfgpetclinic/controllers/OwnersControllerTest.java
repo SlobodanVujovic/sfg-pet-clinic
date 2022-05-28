@@ -1,5 +1,6 @@
 package com.vujo.sfgpetclinic.controllers;
 
+import com.vujo.sfgpetclinic.exceptions.ControllerExceptionHandler;
 import com.vujo.sfgpetclinic.model.Owner;
 import com.vujo.sfgpetclinic.services.OwnerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -42,7 +44,10 @@ class OwnersControllerTest {
         owners.add(Owner.builder().id(1L).build());
         owners.add(Owner.builder().id(2L).build());
 
-        mockMvc = MockMvcBuilders.standaloneSetup(ownersController).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(ownersController)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
     }
 
     @Test
@@ -118,11 +123,32 @@ class OwnersControllerTest {
     public void testProcessCreateOwner() throws Exception {
         when(ownerService.save(any(Owner.class))).thenReturn(Owner.builder().id(1L).build());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/owners/new"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/owners/new")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("firstName", "miki")
+                        .param("lastName", "riki")
+                        .param("address", "Beogradska")
+                        .param("city", "BG")
+                        .param("telephone", "123")
+                )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/owners/1"));
 
         verify(ownerService).save(any(Owner.class));
+    }
+
+    @Test
+    public void testProcessCreateOwnerValidationError() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/owners/new")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("firstName", "miki")
+                        .param("lastName", "riki")
+                        .param("city", "BG")
+                        .param("telephone", "123")
+                )
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("owner"))
+                .andExpect(view().name("owners/createOrUpdateOwnerForm"));
     }
 
     @Test
